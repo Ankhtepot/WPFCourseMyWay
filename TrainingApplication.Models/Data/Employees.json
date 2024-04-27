@@ -1,0 +1,104 @@
+{
+  "OrgName": "Macrohard",
+  "Employees": [
+    {
+      "UserId": "rirani",
+      "JobTitle": "Developer",
+      "FirstName": "Romin",
+      "LastName": "Irani",
+      "FullName": "Romin Irani",
+      "EmployeeCode": "E1",
+      "Region": "CA",
+      "PhoneNo": "408-1234567",
+      "EmailId": "romin.k.irani@gmail.com"
+    },
+    {
+      "UserId": "nirani",
+      "JobTitle": "Developer",
+      "FirstName": "Neil",
+      "LastName": "Irani",
+      "FullName": "Neil Irani",
+      "EmployeeCode": "E2",
+      "Region": "CA",
+      "PhoneNo": "408-1111111",
+      "EmailId": "neilrirani@gmail.com"
+    },
+    {
+      "UserId": "hjoy",
+      "JobTitle": "Program Directory",
+      "FirstName": "hope",
+      "LastName": "joy",
+      "FullName": "Hope Joy",
+      "EmployeeCode": "E3",
+      "Region": "CA",
+      "PhoneNo": "408-2222222",
+      "EmailId": "hopejoy@gmail.com"
+    },
+    {
+      "UserId": "ndavid",
+      "JobTitle": "Developer",
+      "FirstName": "Nathaniel",
+      "LastName": "David",
+      "FullName": "Nathaniel David",
+      "EmployeeCode": "E1",
+      "Region": "CA",
+      "PhoneNo": "408-1234567",
+      "EmailId": "nathaniel.david@gmail.com"
+    },
+    {
+      "UserId": "rgrace",
+      "JobTitle": "Developer",
+      "FirstName": "Rebekah",
+      "LastName": "Grace",
+      "FullName": "Rebekah Grace",
+      "EmployeeCode": "E2",
+      "Region": "CA",
+      "PhoneNo": "408-1111111",
+      "EmailId": "rebekahgrace@gmail.com"
+    },
+    {
+      "UserId": "mmohan",
+      "JobTitle": "Program Directory",
+      "FirstName": "Madhu",
+      "LastName": "Mohan",
+      "FullName": "Madhu Mohan",
+      "EmployeeCode": "E3",
+      "Region": "CA",
+      "PhoneNo": "408-2222222",
+      "EmailId": "madhumohan@gmail.com"
+    },
+    {
+      "UserId": "nmoses",
+      "JobTitle": "Developer",
+      "FirstName": "Norman",
+      "LastName": "Moses",
+      "FullName": "Nornam Moses",
+      "EmployeeCode": "E1",
+      "Region": "CA",
+      "PhoneNo": "408-1234567",
+      "EmailId": "norman.moses@gmail.com"
+    },
+    {
+      "UserId": "ledward",
+      "JobTitle": "Developer",
+      "FirstName": "Love",
+      "LastName": "Edward",
+      "FullName": "Love Edward",
+      "EmployeeCode": "E2",
+      "Region": "CA",
+      "PhoneNo": "408-1111111",
+      "EmailId": "loveedward@gmail.com"
+    },
+    {
+      "UserId": "msane",
+      "JobTitle": "Program Directory",
+      "FirstName": "Mark",
+      "LastName": "Sane",
+      "FullName": "Mark Sane Jeans",
+      "EmployeeCode": "E3",
+      "Region": "CA",
+      "PhoneNo": "408-2222222",
+      "EmailId": "markjeans@gmail.com"
+    }
+  ]
+}

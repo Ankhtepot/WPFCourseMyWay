@@ -1,0 +1,49 @@
+xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+
+ <behaviors:Interaction.Behaviors>
+     <local:EmployeesGridBehavior />
+ </behaviors:Interaction.Behaviors>
+
+namespace TrainingApplication.ViewModels
+{
+    using System;
+    using System.Collections.ObjectModel;
+    using TrainingApplication.Core;
+
+    public class EmployeesViewModel
+    {
+        public ObservableCollection<Employee> employees { get; set; }
+
+        public EmployeesViewModel()
+        {
+            employees = new ObservableCollection<Employee>();
+            PupulateStaticData();
+        }
+
+        private void PupulateStaticData()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                employees.Add(new Employee("John_" + i, "Doe_" + i, i));
+            }
+        }
+    }
+}
+
+
+namespace TrainingApplication.Core
+{
+    public class Employee
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int EmployeeId { get; set; }
+
+        public Employee(string firstName, string lastName, int employeeId)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            EmployeeId = employeeId;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net48</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2"/>
+        <PackageReference Include="System.Text.Json" Version="8.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TrainingApplication.Core\TrainingApplication.Core.csproj"/>
+        <ProjectReference Include="..\TrainingApplication.Models\TrainingApplication.Models.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="PresentationFramework"/>
+    </ItemGroup>
+
+</Project>

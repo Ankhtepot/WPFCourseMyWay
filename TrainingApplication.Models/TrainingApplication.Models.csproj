@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net48</TargetFramework>
+        <Nullable>disable</Nullable>
+        <UseWPF>true</UseWPF>
+        <ImplicitUsings>disable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Data\Employees.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Data\Employees.json"/>
+    </ItemGroup>
+
+</Project>
