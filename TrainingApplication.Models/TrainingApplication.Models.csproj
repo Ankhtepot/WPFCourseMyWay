@@ -15,4 +15,8 @@
         <EmbeddedResource Include="Data\Employees.json"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\TrainingApplication.Core\TrainingApplication.Core.csproj"/>
+    </ItemGroup>
+
 </Project>
