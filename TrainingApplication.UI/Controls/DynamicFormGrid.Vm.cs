@@ -231,11 +231,5 @@ namespace TrainingApplication.UI.Controls
                 }
             }
         }
-
-        private static int ExcludeHiddenAttributesCount(IEnumerable<PropertyInfo> properties)
-        {
-            return properties.Count(p =>
-                !Attribute.GetCustomAttributes(p).Any(a => a is HiddenAttribute hidden && hidden.IsHidden));
-        }
     }
 }
