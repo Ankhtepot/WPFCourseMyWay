@@ -181,8 +181,13 @@ namespace TrainingApplication.UI.Controls
                 Attribute[] attributes = Attribute.GetCustomAttributes(t);
                 foreach (Attribute attribute in attributes)
                 {
-                    if (attribute is HiddenAttribute hidden && hidden.IsHidden)
+                    if (attribute is HiddenAttribute hidden)
                     {
+                        if (hidden.IsHidden)
+                        {
+                            break;
+                        }
+
                         continue;
                     }
 
