@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -149,6 +150,7 @@ namespace TrainingApplication.ViewModels
             Employees = new ObservableCollection<Employee>();
             AddEmployee = new RelayCommand(AddNewEmployee);
             PupulateStaticData();
+            ItemSelected = Employees.First(e => e.FirstName == "Nathaniel");
         }
 
         private void AddNewEmployee()

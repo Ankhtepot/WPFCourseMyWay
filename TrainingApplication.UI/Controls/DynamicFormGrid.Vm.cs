@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -7,14 +8,16 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using TrainingApplication.Core;
 using TrainingApplication.Core.Attributes;
-using TextBoxPair = System.Collections.Generic.KeyValuePair<string, System.Windows.Controls.TextBox>;
+using Xceed.Wpf.Toolkit;
+using StoredControls =
+    System.Collections.Generic.KeyValuePair<string, TrainingApplication.UI.Controls.ControlsReference>;
 
 namespace TrainingApplication.UI.Controls
 {
     public partial class DynamicFormGrid
     {
         private static Grid _grid;
-        private static List<TextBoxPair> _textBoxes = new List<TextBoxPair>();
+        private static List<StoredControls> _controls = new List<StoredControls>();
         private static Type _modelType;
 
         private static void SelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -29,31 +32,117 @@ namespace TrainingApplication.UI.Controls
             //Checks if e.NewValue is not null and type fits to _modelType
             if (e.NewValue == null || e.NewValue.GetType() != _modelType) return;
             //Clears all bindings from TextBoxes to prevent overwriting previous item
-            foreach (TextBoxPair pair in _textBoxes)
+            foreach (StoredControls controls in _controls)
             {
-                BindingOperations.ClearBinding(pair.Value, TextBox.TextProperty);
+                BindingOperations.ClearBinding(controls.Value.TextBox, TextBox.TextProperty);
             }
 
             PropertyInfo[] properties = _modelType.GetProperties();
 
             foreach (PropertyInfo property in properties)
             {
-                if (_textBoxes.All(t => t.Key != property.Name))
+                if (_controls.All(t => t.Key != property.Name))
                 {
                     continue;
                 }
 
-                TextBox box = _textBoxes.First(t => t.Key == property.Name).Value;
+                ControlsReference controls = _controls.First(t => t.Key == property.Name).Value;
+                TextBox textBox = controls.TextBox;
+                Label label = controls.Label;
 
-                box.Text = property.GetValue(e.NewValue).ToString();
-                // sets 2 way binding for the TextBox and e.NewValue
-                box.SetBinding(TextBox.TextProperty, new Binding(property.Name)
+                bool shouldBeShown = ResolveShowIfTrueAttribute(property, e.NewValue);
+
+                if (shouldBeShown)
                 {
-                    Source = e.NewValue,
+                    label.Visibility = Visibility.Visible;
+                    textBox.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    label.Visibility = Visibility.Collapsed;
+                    textBox.Visibility = Visibility.Collapsed;
+                    continue;
+                }
+
+                // sets 2 way binding for the TextBox and e.NewValue
+                textBox.SetBinding(TextBox.TextProperty, SetTextBoxBinding(property, e.NewValue));
+            }
+        }
+
+        private static BindingBase SetTextBoxBinding(PropertyInfo property, object oNewValue)
+        {
+            BindingBase binding = new Binding(property.Name)
+            {
+                Source = oNewValue,
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+
+            if (!HasConcatWithAttribute(property)) return binding;
+            ConcatWithAttribute concatWithAttribute = property.GetCustomAttribute<ConcatWithAttribute>();
+            binding = new MultiBinding();
+            ((MultiBinding) binding).Converter = new StringConcatConverter();
+            ((MultiBinding) binding).ConverterParameter = concatWithAttribute.Separator;
+            ((MultiBinding) binding).Bindings.Add(new Binding(property.Name)
+            {
+                Source = oNewValue,
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            });
+
+            foreach (string otherProperty in concatWithAttribute.OtherProperty)
+            {
+                ((MultiBinding) binding).Bindings.Add(new Binding(otherProperty)
+                {
+                    Source = oNewValue,
                     Mode = BindingMode.TwoWay,
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
             }
+
+            // ((MultiBinding) binding).Bindings.Add(new Binding(concatWithAttribute.OtherProperty)
+            // {
+            //     Source = oNewValue,
+            //     Mode = BindingMode.TwoWay,
+            //     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            // });
+
+            return binding;
+        }
+
+        private static bool ResolveShowIfTrueAttribute(PropertyInfo property, object oNewValue)
+        {
+            if (oNewValue == null)
+            {
+                Logger.Log("Model item is null");
+                return true;
+            }
+
+            if (property == null)
+            {
+                Logger.Log("Property is null");
+                return true;
+            }
+
+            Attribute[] attributes = Attribute.GetCustomAttributes(property);
+
+            foreach (Attribute attribute in attributes)
+            {
+                if (!(attribute is ShowIfTrueAttribute showIfTrue)) continue;
+
+                PropertyInfo propertyInfo = oNewValue.GetType().GetProperty(showIfTrue.BooleanFieldName);
+
+                if (propertyInfo != null)
+                {
+                    bool? value = (bool?) propertyInfo.GetValue(oNewValue);
+                    return value ?? true;
+                }
+
+                Logger.Log($"Property {showIfTrue.BooleanFieldName} not found in {oNewValue.GetType().Name}");
+                return true;
+            }
+
+            return true;
         }
 
         private static void BuildGrid(object modelItem)
@@ -122,35 +211,18 @@ namespace TrainingApplication.UI.Controls
 
                 _grid.RowDefinitions.Add(new RowDefinition() {Height = GridLength.Auto});
 
-                Label label = new Label()
-                {
-                    Content = properties[i].Name.ToHumanReadable(),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(0, 0, 5, 0)
-                };
-
-                Grid.SetRow(label, i);
-                Grid.SetColumn(label, 0);
-
-                TextBox textBox = new TextBox()
-                {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(0, 0, 5, 0)
-                };
-
-                Grid.SetRow(textBox, i);
-                Grid.SetColumn(textBox, 1);
+                Label label = CreateLabel(properties, i);
+                TextBox textBox = CreateTextBox(properties, i);
 
                 _grid.Children.Add(label);
                 _grid.Children.Add(textBox);
 
                 // Enters TextBox into _textBoxes on the index where key is same as property name
-                int index = _textBoxes.FindIndex(t => t.Key == properties[i].Name);
+                int index = _controls.FindIndex(t => t.Key == properties[i].Name);
                 if (index != -1)
                 {
-                    _textBoxes[index] = new TextBoxPair(properties[i].Name, textBox);
+                    _controls[index] = new StoredControls(properties[i].Name,
+                        new ControlsReference {Label = label, TextBox = textBox});
                 }
                 else
                 {
@@ -159,6 +231,75 @@ namespace TrainingApplication.UI.Controls
             }
 
             _topContainer.Content = _grid;
+        }
+
+        private static TextBox CreateTextBox(IEnumerable<PropertyInfo> properties, int index)
+        {
+            TextBox textBox = ResolveTextBoxType(properties.ElementAt(index));
+
+            Grid.SetRow(textBox, index);
+            Grid.SetColumn(textBox, 1);
+
+            return textBox;
+        }
+
+        private static TextBox ResolveTextBoxType(PropertyInfo property)
+        {
+            TextBox textBox = new TextBox
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+
+
+            if (ShouldBeDisabled(property))
+            {
+                textBox.IsEnabled = false;
+            }
+
+            MaskedAttribute maskedAttribute = property.GetCustomAttribute<MaskedAttribute>();
+
+            if (maskedAttribute == null)
+            {
+                return textBox;
+            }
+
+            textBox = new MaskedTextBox();
+            ((MaskedTextBox) textBox).Mask = maskedAttribute.Mask;
+
+            return textBox;
+        }
+
+        private static bool ShouldBeDisabled(PropertyInfo property)
+        {
+            return property.GetCustomAttribute<DisabledAttribute>() is DisabledAttribute disabledAttribute &&
+                   disabledAttribute.IsDisabled;
+        }
+
+        private static Label CreateLabel(IReadOnlyList<PropertyInfo> properties, int i)
+        {
+            Label label = new Label()
+            {
+                Content = SetLabelText(properties, i),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+
+            Grid.SetRow(label, i);
+            Grid.SetColumn(label, 0);
+
+            return label;
+        }
+
+        private static string SetLabelText(IReadOnlyList<PropertyInfo> properties, int i)
+        {
+            DisplayNameAttribute displayNameAttribute = properties[i].GetCustomAttribute<DisplayNameAttribute>();
+
+            return displayNameAttribute != null
+                ? displayNameAttribute.DisplayName
+                : properties[i].Name.ToHumanReadable();
         }
 
         /// <summary>
@@ -170,60 +311,56 @@ namespace TrainingApplication.UI.Controls
         /// <param name="properties"></param>
         private static void FillTextBoxesKeys(IEnumerable<PropertyInfo> properties)
         {
-            _textBoxes.Clear();
+            _controls.Clear();
             int propertiesCount = properties.Count();
-            _textBoxes = new List<TextBoxPair>(propertiesCount);
-            _textBoxes.AddRange(new TextBoxPair[propertiesCount]);
+            _controls = new List<StoredControls>(propertiesCount);
+            _controls.AddRange(new StoredControls[propertiesCount]);
 
-            List<PropertyInfo> temp = new List<PropertyInfo>();
-            foreach (PropertyInfo t in properties)
+            List<PropertyInfo> unorderedProperties = new List<PropertyInfo>();
+            foreach (PropertyInfo propertyInfo in properties)
             {
-                Attribute[] attributes = Attribute.GetCustomAttributes(t);
-                foreach (Attribute attribute in attributes)
+                Attribute[] attributes = Attribute.GetCustomAttributes(propertyInfo);
+
+                if (attributes.OfType<HiddenAttribute>().Any(attr => attr.IsHidden))
                 {
-                    if (attribute is HiddenAttribute hidden)
-                    {
-                        if (hidden.IsHidden)
-                        {
-                            break;
-                        }
+                    continue;
+                }
 
-                        continue;
-                    }
-
-                    if (!(attribute is OrderAttribute orderAttribute))
-                    {
-                        temp.Add(t);
-                        continue;
-                    }
+                if (!attributes.OfType<OrderAttribute>().Any())
+                {
+                    unorderedProperties.Add(propertyInfo);
+                }
+                else
+                {
+                    OrderAttribute orderAttribute = attributes.OfType<OrderAttribute>().First();
 
                     int order = orderAttribute.Order;
 
-                    if (order > _textBoxes.Count - 1)
+                    if (order > _controls.Count - 1)
                     {
-                        Logger.Log($"Order attribute value {order} is higher than _textBoxes count {_textBoxes.Count}");
-                        temp.Add(t);
+                        Logger.Log($"Order attribute value {order} is higher than _textBoxes count {_controls.Count}");
+                        unorderedProperties.Add(propertyInfo);
                         continue;
                     }
 
-                    if (!string.IsNullOrEmpty(_textBoxes[order].Key))
+                    if (!string.IsNullOrEmpty(_controls[order].Key))
                     {
-                        Logger.Log($"_textBoxes[{order}] is already filled with key {_textBoxes[order].Key}.");
-                        temp.Add(t);
+                        Logger.Log($"_textBoxes[{order}] is already filled with key {_controls[order].Key}.");
+                        unorderedProperties.Add(propertyInfo);
                         continue;
                     }
 
-                    _textBoxes[order] = new TextBoxPair(t.Name, null);
+                    _controls[order] = new StoredControls(propertyInfo.Name, null);
                 }
             }
 
             // Fills _textBoxes with properties from temp list
-            foreach (PropertyInfo propertyInfo in temp)
+            foreach (PropertyInfo propertyInfo in unorderedProperties.Distinct())
             {
-                int index = _textBoxes.FindIndex(t => string.IsNullOrEmpty(t.Key));
+                int index = _controls.FindIndex(t => string.IsNullOrEmpty(t.Key));
                 if (index != -1)
                 {
-                    _textBoxes[index] = new TextBoxPair(propertyInfo.Name, null);
+                    _controls[index] = new StoredControls(propertyInfo.Name, null);
                 }
                 else
                 {
@@ -231,5 +368,14 @@ namespace TrainingApplication.UI.Controls
                 }
             }
         }
+
+        private static bool HasConcatWithAttribute(PropertyInfo property) =>
+            property.GetCustomAttribute<ConcatWithAttribute>() != null;
+    }
+
+    internal class ControlsReference
+    {
+        public TextBox TextBox { get; set; }
+        public Label Label { get; set; }
     }
 }

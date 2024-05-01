@@ -10,7 +10,8 @@
       "EmployeeCode": "E1",
       "Region": "CA",
       "PhoneNo": "408-1234567",
-      "EmailId": "romin.k.irani@gmail.com"
+      "EmailId": "romin.k.irani@gmail.com",
+      "ShowDetails": true
     },
     {
       "UserId": "nirani",
@@ -21,7 +22,8 @@
       "EmployeeCode": "E2",
       "Region": "CA",
       "PhoneNo": "408-1111111",
-      "EmailId": "neilrirani@gmail.com"
+      "EmailId": "neilrirani@gmail.com",
+      "ShowDetails": true
     },
     {
       "UserId": "hjoy",
@@ -32,7 +34,8 @@
       "EmployeeCode": "E3",
       "Region": "CA",
       "PhoneNo": "408-2222222",
-      "EmailId": "hopejoy@gmail.com"
+      "EmailId": "hopejoy@gmail.com",
+      "ShowDetails": true
     },
     {
       "UserId": "ndavid",
@@ -43,7 +46,8 @@
       "EmployeeCode": "E1",
       "Region": "CA",
       "PhoneNo": "408-1234567",
-      "EmailId": "nathaniel.david@gmail.com"
+      "EmailId": "nathaniel.david@gmail.com",
+      "ShowDetails": false
     },
     {
       "UserId": "rgrace",
@@ -54,7 +58,8 @@
       "EmployeeCode": "E2",
       "Region": "CA",
       "PhoneNo": "408-1111111",
-      "EmailId": "rebekahgrace@gmail.com"
+      "EmailId": "rebekahgrace@gmail.com",
+      "ShowDetails": false
     },
     {
       "UserId": "mmohan",
@@ -65,7 +70,8 @@
       "EmployeeCode": "E3",
       "Region": "CA",
       "PhoneNo": "408-2222222",
-      "EmailId": "madhumohan@gmail.com"
+      "EmailId": "madhumohan@gmail.com",
+      "ShowDetails": false
     },
     {
       "UserId": "nmoses",
@@ -76,7 +82,8 @@
       "EmployeeCode": "E1",
       "Region": "CA",
       "PhoneNo": "408-1234567",
-      "EmailId": "norman.moses@gmail.com"
+      "EmailId": "norman.moses@gmail.com",
+      "ShowDetails": true
     },
     {
       "UserId": "ledward",
@@ -87,7 +94,8 @@
       "EmployeeCode": "E2",
       "Region": "CA",
       "PhoneNo": "408-1111111",
-      "EmailId": "loveedward@gmail.com"
+      "EmailId": "loveedward@gmail.com",
+      "ShowDetails": true
     },
     {
       "UserId": "msane",
@@ -98,7 +106,8 @@
       "EmployeeCode": "E3",
       "Region": "CA",
       "PhoneNo": "408-2222222",
-      "EmailId": "markjeans@gmail.com"
+      "EmailId": "markjeans@gmail.com",
+      "ShowDetails": true
     }
   ]
 }

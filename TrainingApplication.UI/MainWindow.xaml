@@ -6,50 +6,17 @@
         xmlns:uc="clr-namespace:TrainingApplication.UI.Controls"
         xmlns:viewmodels="clr-namespace:TrainingApplication.ViewModels;assembly=TrainingApplication.ViewModels"
         mc:Ignorable="d"
-        Title="Training Application" Height="450" Width="800">
+        Title="Training Application" Height="900" Width="800">
     <Window.DataContext>
         <viewmodels:EmployeesViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <!--
-        <Grid Background="LightGreen" Margin="6">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Label Content="First Name" Grid.Row="0" Grid.Column="0" />
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="3"
-                     Text="{Binding FirstName}" />
-
-            <Label Content="Last Name" Grid.Row="1" Grid.Column="0" />
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="3"
-                     Text="{Binding LastName}" />
-
-
-            <Label Content="Age" Grid.Row="2" Grid.Column="0" />
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="3"
-                     Text="{Binding Age}" />
-
-            <Button
-                Command="{Binding AddEmployee}"
-                Grid.Row="3" Grid.Column="1"
-                Width="100"
-                HorizontalAlignment="Right"
-                Margin="0,10,10,0">
-                Add Employee
-            </Button>
-        </Grid> -->
+       
         <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" Grid.Column="0" Margin="0,0,5,0">
             <ListView
                 ItemsSource="{Binding Path=Employees}"
@@ -92,47 +59,18 @@
                 </ListBox.ItemTemplate>
             </ListView>
         </Border>
-        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" Grid.Column="1" Background="Beige">
+        <GridSplitter
+            Grid.Column="1"
+            Width="5"
+            Background="Black"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0,0,5,0"
+            Height="100"
+            />
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" Grid.Column="2" Background="Beige">
             <uc:DynamicFormGrid DataSource="{Binding Employees}"
                                 SelectedItem="{Binding ItemSelected, Mode=TwoWay}" />
-            <!-- <Grid> -->
-            <!--     <Grid.RowDefinitions> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--         <RowDefinition Height="auto" /> -->
-            <!--     </Grid.RowDefinitions> -->
-            <!--     <Grid.ColumnDefinitions> -->
-            <!--         <ColumnDefinition Width="Auto"/> -->
-            <!--         <ColumnDefinition Width="Auto"/> -->
-            <!--     </Grid.ColumnDefinitions> -->
-            <!--      -->
-            <!--     <Label Content="User Id" Grid.Row="0" Grid.Column="0" /> -->
-            <!--     <TextBox Grid.Row="0" Grid.Column="1" Margin="3" Text="{Binding UserId}" /> -->
-            <!-- -->
-            <!--     <Label Content="Job Title" Grid.Row="1" Grid.Column="0" /> -->
-            <!--     <TextBox Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding JobTitle}" /> -->
-            <!-- -->
-            <!--     <Label Content="Age" Grid.Row="2" Grid.Column="0" /> -->
-            <!--     <TextBox Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding Age}" /> -->
-            <!--      -->
-            <!--     <Label Content="Age" Grid.Row="3" Grid.Column="0" /> -->
-            <!--     <TextBox Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding Age}" /> -->
-            <!-- -->
-            <!--     <Button -->
-            <!--         Command="{Binding AddEmployee}" -->
-            <!--         Grid.Row="8" Grid.Column="1" -->
-            <!--         Width="100" -->
-            <!--         HorizontalAlignment="Right" -->
-            <!--         Margin="0,10,10,0"> -->
-            <!--         Add Employee -->
-            <!--     </Button> -->
-            <!-- </Grid> -->
         </Border>
     </Grid>
 </Window>
