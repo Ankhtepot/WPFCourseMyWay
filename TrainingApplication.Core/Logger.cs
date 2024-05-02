@@ -13,5 +13,14 @@ namespace TrainingApplication.Core
 
             Console.WriteLine($"[{className}: {callerMethod}] --> {message}");
         }
+
+        public static void LogNotImplemented([CallerFilePath] string callerClass = "failed class",
+            [CallerMemberName] string callerMethod = "failed method")
+        {
+            string className = callerClass.Substring(callerClass.LastIndexOf("\\", StringComparison.Ordinal) + 1)
+                .Replace(".cs", "");
+
+            Console.WriteLine($"[{className}: {callerMethod}] --> Method not implemented");
+        }
     }
 }

@@ -10,6 +10,21 @@
     <Window.DataContext>
         <viewmodels:EmployeesViewModel />
     </Window.DataContext>
+    
+    <Window.Resources>
+        <Style x:Key="GridLabelStyle" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Background" Value="Cornsilk"/>
+        </Style>
+        <Style x:Key="GridTextBoxStyle" TargetType="TextBox">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0,0,5"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -70,7 +85,10 @@
             />
         <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" Grid.Column="2" Background="Beige">
             <uc:DynamicFormGrid DataSource="{Binding Employees}"
-                                SelectedItem="{Binding ItemSelected, Mode=TwoWay}" />
+                                SelectedItem="{Binding ItemSelected, Mode=TwoWay}"
+                                LabelStyle="{StaticResource GridLabelStyle}"
+                                TextBoxStyle="{StaticResource GridTextBoxStyle}"
+                                />
         </Border>
     </Grid>
 </Window>
