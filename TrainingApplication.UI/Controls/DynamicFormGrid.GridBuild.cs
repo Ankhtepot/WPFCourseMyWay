@@ -113,15 +113,11 @@ namespace TrainingApplication.UI.Controls
 
         private static TextBox ResolveTextBoxType(PropertyInfo property)
         {
-            TextBox textBox = new TextBox();
+            TextBox textBox = new TextBox
             {
-                textBox.Style = _textBoxStyle;
-                // HorizontalAlignment = HorizontalAlignment.Stretch,
-                // VerticalAlignment = VerticalAlignment.Center,
-                // Margin = new Thickness(0, 0, 5, 0)
-            }
-            ;
-            // TextBoxStyleChanged(_instance, new DependencyPropertyChangedEventArgs(TextBoxStyleProperty, null, _textBoxStyle));
+                Style = _textBoxStyle,
+            };
+
 
             if (ShouldBeDisabled(property))
             {
@@ -138,9 +134,10 @@ namespace TrainingApplication.UI.Controls
             textBox = new MaskedTextBox()
             {
                 Mask = maskedAttribute.Mask,
-                Style = _textBoxStyle
+                Style = _textBoxStyle != null && _textBoxStyle.TargetType == typeof(TextBox)
+                    ? _textBoxStyle
+                    : null
             };
-            // ((MaskedTextBox) textBox).Mask = maskedAttribute.Mask;
 
             return textBox;
         }
@@ -162,13 +159,10 @@ namespace TrainingApplication.UI.Controls
             Label label = new Label
             {
                 Content = SetLabelText(property),
-                Style = _labelStyle
-                // HorizontalAlignment = HorizontalAlignment.Right,
-                // VerticalAlignment = VerticalAlignment.Center,
-                // Margin = new Thickness(0, 0, 5, 0)
+                Style = _labelStyle != null && _labelStyle.TargetType == typeof(Label)
+                    ? _labelStyle
+                    : null
             };
-
-            // LabelStyleChanged(_instance, new DependencyPropertyChangedEventArgs(LabelStyleProperty, null, _labelStyle));
 
             Grid.SetRow(label, i);
             Grid.SetColumn(label, 0);

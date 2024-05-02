@@ -22,6 +22,7 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5,0,0,5"/>
+            <Setter Property="Foreground" Value="BlueViolet"/>
         </Style>
     </Window.Resources>
     
@@ -31,8 +32,14 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="600"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
        
-        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" Grid.Column="0" Margin="0,0,5,0">
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" 
+                Grid.Column="0" Grid.Row="0"
+                Margin="0,0,5,0">
             <ListView
                 ItemsSource="{Binding Path=Employees}"
                 SelectedItem="{Binding Path=ItemSelected}"
@@ -75,7 +82,7 @@
             </ListView>
         </Border>
         <GridSplitter
-            Grid.Column="1"
+            Grid.Column="1" Grid.Row="0"
             Width="5"
             Background="Black"
             HorizontalAlignment="Center"
@@ -83,12 +90,39 @@
             Margin="0,0,5,0"
             Height="100"
             />
-        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" Grid.Column="2" Background="Beige">
+        <Border CornerRadius="5" BorderThickness="1" BorderBrush="DarkBlue" 
+                Grid.Column="2" Grid.Row="0"
+                Background="Beige">
             <uc:DynamicFormGrid DataSource="{Binding Employees}"
                                 SelectedItem="{Binding ItemSelected, Mode=TwoWay}"
                                 LabelStyle="{StaticResource GridLabelStyle}"
                                 TextBoxStyle="{StaticResource GridTextBoxStyle}"
                                 />
         </Border>
+        <Grid Grid.Row="1" Grid.Column="0" ColumnSpan="3">
+            <Grid.Resources>
+                <Style TargetType="TextBox">
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontFamily" Value="Times New Roman"/>
+                    <Setter Property="Foreground" Value="MediumPurple"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                    <Setter Property="AcceptsReturn" Value="True"/>
+                    <Setter Property="Background" Value="LightGray"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource ResourceKey={x:Type TextBox}}" x:Key="TitleStyle">
+                    <Setter Property="FontSize" Value="55"/>
+                    <Setter Property="Foreground" Value="DarkBlue"/>
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource ResourceKey={x:Type TextBox}}" x:Key="SubtitleText">
+                    <Setter Property="FontSize" Value="26"/>
+                    <Setter Property="Foreground" Value="DarkBlue"/>
+                </Style>
+            </Grid.Resources>
+            <StackPanel>
+                <TextBox Text="Title Text" Style="{StaticResource TitleStyle}" />
+                <TextBox Text="Sub Title Text" Style="{StaticResource SubtitleText}" />
+                <TextBox Text="Body of the Paragraph" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
